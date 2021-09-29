@@ -103,8 +103,27 @@ unpackNum (String n) = let parsed = reads n :: [(Integer, String)] in
 unpackNum (List [n]) = unpackNum n
 unpackNum _ = 0
 
+unpackStr :: LispVal -> String
+unpackStr (String s) = s
+
+unpackAtom :: LispVal -> String
+unpackAtom (Atom s) = s
+
+unpackBool :: LispVal -> Bool
+unpackBool (Bool b) = b
+
 numericBinop :: (Integer -> Integer -> Integer) -> [LispVal] -> LispVal
 numericBinop op params = Number $ foldl1 op $ map unpackNum params
+
+compareBinop [Atom x, Atom y] = (Bool (x==y))
+compareBinop _ = (Bool False)
+
+boolBinop :: (LispVal -> a) -> (a -> a -> Bool) -> [LispVal] -> LispVal
+boolBinop unpacker op [x, y] = Bool $ (unpacker x) `op` (unpacker y)
+
+numBoolBinop = boolBinop unpackNum
+strBoolBinop = boolBinop unpackStr
+boolBoolBinop = boolBinop unpackBool
 
 apply :: String -> [LispVal] -> LispVal 
 apply func args = maybe (Bool False) ($ args) $ lookup func primitives
@@ -116,7 +135,21 @@ primitives = [("+", numericBinop (+)),
               ("/", numericBinop div),
               ("mod", numericBinop mod),
               ("quotient", numericBinop quot),
-              ("remainder", numericBinop rem)]
+              ("remainder", numericBinop rem),
+              ("=", numBoolBinop (==)),
+              ("<", numBoolBinop (<)),
+              (">", numBoolBinop (>)),
+              ("/=", numBoolBinop (/=)),
+              (">=", numBoolBinop (>=)),
+              ("<=", numBoolBinop (<=)),
+              ("&&", boolBoolBinop (&&)),
+              ("||", boolBoolBinop (||)),
+              ("string=?", strBoolBinop (==)),
+              ("string<?", strBoolBinop (<)),
+              ("string>?", strBoolBinop (>)),
+              ("string<=?", strBoolBinop (<=)),
+              ("string>=?", strBoolBinop (>=)),
+              ("eq?", compareBinop)]
 
 eval :: LispVal -> LispVal
 eval val@(String _) = val
