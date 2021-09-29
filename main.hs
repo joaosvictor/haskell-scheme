@@ -1,9 +1,13 @@
+{-# LANGUAGE FlexibleInstances #-} 
 
 module Main where 
 import Text.ParserCombinators.Parsec hiding (spaces)
 import System.Environment
 import Control.Monad
-
+import Numeric
+import System.IO
+import Data.IORef
+import Control.Monad.IO.Class
 
 -- Data Types
 
@@ -14,6 +18,7 @@ data LispVal = Atom String -- which stores a String naming the atom
              | Float Float -- containing a Haskell float
              | String String -- containing a Haskell String
              | Bool Bool -- containing a Haskell boolean value
+             deriving Show
 
 -- Parser
 
@@ -81,12 +86,47 @@ spaces = skipMany1 space -- ignore spaces
 symbol :: Parser Char
 symbol = oneOf "!#$%&|*+-/:<=>?@^_~" -- recognizes symbols
 
-readExpr :: String -> String
+readExpr :: String -> LispVal
 readExpr input = case parse parseExpr "lisp" input of
-    Left err -> "No match: " ++ show err
-    Right val -> "Found value"
+    Left err -> String $ "No match: " ++ show err
+    Right val -> val  
+
+-- Evaluation
+
+unpackNum :: LispVal -> Integer
+unpackNum (Number n) = n
+unpackNum (String n) = let parsed = reads n :: [(Integer, String)] in
+                           if null parsed
+                              then 0
+                              else fst $ parsed !! 0
+
+unpackNum (List [n]) = unpackNum n
+unpackNum _ = 0
+
+numericBinop :: (Integer -> Integer -> Integer) -> [LispVal] -> LispVal
+numericBinop op params = Number $ foldl1 op $ map unpackNum params
+
+apply :: String -> [LispVal] -> LispVal 
+apply func args = maybe (Bool False) ($ args) $ lookup func primitives
+
+primitives :: [(String, [LispVal] -> LispVal)]
+primitives = [("+", numericBinop (+)),
+              ("-", numericBinop (-)),
+              ("*", numericBinop (*)),
+              ("/", numericBinop div),
+              ("mod", numericBinop mod),
+              ("quotient", numericBinop quot),
+              ("remainder", numericBinop rem)]
+
+eval :: LispVal -> LispVal
+eval val@(String _) = val
+eval val@(Number _) = val
+eval val@(Bool _) = val
+eval (List [Atom "quote", val]) = val
+eval (List (Atom func : args)) = apply func $ map eval args
 
 main :: IO ()
 main = do
-    (expr:_) <- getArgs
-    putStrLn (readExpr expr)
+  (expr:_) <- getArgs
+  putStrLn $ show $ eval $ readExpr expr
+
