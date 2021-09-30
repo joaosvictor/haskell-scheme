@@ -9,11 +9,15 @@ You can read more about it on [Wikipedia](https://en.wikipedia.org/wiki/Scheme_(
 
 # Usage
 
-You can download the interactive haskell environment from the haskell website: https://www.haskell.org/downloads/. Then you will be able to run this project through the `ghc` or `ghci`
+You can download the interactive haskell environment from the haskell website: https://www.haskell.org/downloads/. Then you will be able to run this project through the `ghc` or `ghci`.
 
 After installation you can either run the file `run.sh` or edit and recompile the `main.hs` file through `ghci`.
 
 ```
+# run:
+chmod +x run.sh
+./run.sh
+
 # recompile:
 ghc main.hs && ./main
 ```
