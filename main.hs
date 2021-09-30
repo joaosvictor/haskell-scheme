@@ -251,4 +251,4 @@ until_ pred prompt action = do
 main :: IO ()
 main = do
   env <- primitiveBindings
-  until_ (== "quit") (readPrompt "Lisp>>> ") (evalAndPrint env)
+  until_ (== "q") (readPrompt "Lisp>>> ") (evalAndPrint env)
