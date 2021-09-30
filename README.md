@@ -9,4 +9,16 @@ You can read more about it on [Wikipedia](https://en.wikipedia.org/wiki/Scheme_(
 
 # Usage
 
-You can download the interactive haskell environment from the haskell website: (https://www.haskell.org/downloads/). Then you will be able to run this project through the `ghc` or `ghci`
+You can download the interactive haskell environment from the haskell website: https://www.haskell.org/downloads/. Then you will be able to run this project through the `ghc` or `ghci`
+
+After installation you can either run the file `run.sh` or edit and recompile the `main.hs` file through `ghci`.
+
+```
+# recompile:
+
+ghc main.hs && ./main
+
+```
+
+To run examples you can follow the book [Structure and Interpretation of Computer Programs](https://mitpress.mit.edu/sites/default/files/sicp/full-text/book/book.html).
+You may find this project up to 1.1.7 in Chapter 1.
