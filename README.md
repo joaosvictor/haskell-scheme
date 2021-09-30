@@ -16,8 +16,9 @@ After installation you can either run the file `run.sh` or edit and recompile th
 ```
 # recompile:
 ghc main.hs && ./main
-
 ```
+
+
 
 To run examples you can follow the book [Structure and Interpretation of Computer Programs](https://mitpress.mit.edu/sites/default/files/sicp/full-text/book/book.html).
 You may find this project up to 1.1.7 in Chapter 1.
