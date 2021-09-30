@@ -5,8 +5,7 @@ This project is focused on writing a scheme in Haskell. It follows the [Write Yo
 # What is a Scheme?
 
 A Scheme is statically scoped and properly tail-recursive dialect of the Lisp programming language.
-You can read more about it on [Wikipedia](https://en.wikipedia.org/wiki/Scheme_(programming_language)). A Scheme is also a very basic, but robust, programming language that is both simple to use and highly extendible. 
-
+You can read more about it on [Wikipedia](https://en.wikipedia.org/wiki/Scheme_(programming_language)).
 # Usage
 
 You can download the interactive haskell environment from the haskell website: https://www.haskell.org/downloads/. Then you will be able to run this project through the `ghc` or `ghci`.
