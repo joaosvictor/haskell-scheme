@@ -15,7 +15,6 @@ After installation you can either run the file `run.sh` or edit and recompile th
 
 ```
 # recompile:
-
 ghc main.hs && ./main
 
 ```
